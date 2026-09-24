@@ -1,0 +1,42 @@
+# Python Bytecode & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual Environments
+.venv/
+env/
+venv/
+ENV/
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Application State & Local Storage
+data/app.db
+data/app.db-wal
+data/app.db-shm
+data/uploads/*
+!data/uploads/.gitkeep
+data/storage/*
+!data/storage/.gitkeep
+data/vector_index/*
+!data/vector_index/.gitkeep
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo

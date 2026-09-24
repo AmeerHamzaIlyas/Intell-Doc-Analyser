@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Enterprise Intelligent Document Understanding, Multimodal Extraction, Hybrid Semantic Search, and Grounded RAG Platform.">
+  <title>DocPulse AI | Intelligent Document Understanding & Analysis System</title>
+  
+  <!-- Google Fonts: Outfit & Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+
+  <!-- Top Application Header -->
+  <header class="app-header">
+    <div class="brand-wrapper">
+      <div class="brand-icon">⚡</div>
+      <div class="brand-text">
+        <h1>DocPulse Intelligence</h1>
+        <div class="brand-tagline">Multimodal Understanding • Hybrid Search • Grounded RAG</div>
+      </div>
+    </div>
+
+    <div class="header-status">
+      <div class="metrics-summary">
+        <div class="metric-item">Docs: <strong id="metricDocs">0</strong></div>
+        <div class="metric-item">Vectors: <strong id="metricVectors">0</strong></div>
+        <div class="metric-item">Chunks: <strong id="metricChunks">0</strong></div>
+      </div>
+      <div class="status-pill">
+        <div class="status-dot"></div>
+        <span id="statusLabel">Engine Online</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Studio Navigation Tabs Bar -->
+  <nav class="tabs-nav" aria-label="Studio Navigation">
+    <button class="tab-btn active" data-tab="repo" id="tabNavRepo">📁 Repository & Ingestion</button>
+    <button class="tab-btn" data-tab="search" id="tabNavSearch">⚡ Hybrid Search</button>
+    <button class="tab-btn" data-tab="rag" id="tabNavRag">💬 Grounded RAG Chat</button>
+    <button class="tab-btn" data-tab="summary" id="tabNavSummary">📊 Summarization Studio</button>
+    <button class="tab-btn" data-tab="compare" id="tabNavCompare">⚖️ Document Comparison</button>
+    <button class="tab-btn" data-tab="health" id="tabNavHealth">🔍 Engine Health</button>
+  </nav>
+
+  <!-- Main Application Workspace -->
+  <main class="app-main">
+
+    <!-- 1. Repository & Ingestion Studio Pane -->
+    <section class="tab-pane active" id="tab-repo">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>📁 Ingestion & Document Repository</h2>
+            <p class="panel-desc">Drag and drop enterprise documents for automatic multimodal extraction, layout analysis, and hybrid indexing.</p>
+          </div>
+        </div>
+
+        <!-- Drag & Drop Upload Zone -->
+        <div class="dropzone" id="dropzone">
+          <div class="dropzone-icon">☁️</div>
+          <div class="dropzone-title">Drag & Drop Documents Here</div>
+          <div class="dropzone-sub">Supports PDF, DOCX, TXT, Markdown, and Scanned Images (PNG, JPG, TIFF) up to 50MB</div>
+          <input type="file" id="fileInput" class="file-input-hidden" accept=".pdf,.docx,.txt,.md,.png,.jpg,.jpeg,.tiff">
+          <button type="button" class="btn-upload" id="btnSelectFile">Browse Local Files</button>
+
+          <!-- Upload Progress -->
+          <div class="upload-progress-container" id="uploadProgress">
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" id="progressBar"></div>
+            </div>
+            <div class="progress-label">
+              <span id="progressText">Uploading and chunking...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ingested Documents Grid -->
+        <div style="margin-top: 2rem;">
+          <h3 style="font-size: 1.05rem; font-weight: 600; color: #fff; margin-bottom: 0.5rem;">Ingested Documents</h3>
+          <div class="doc-grid" id="documentsGrid">
+            <!-- Dynamic Document Cards -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Hybrid Search Studio Pane -->
+    <section class="tab-pane" id="tab-search">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>⚡ Hybrid Semantic & Lexical Search Studio</h2>
+            <p class="panel-desc">Combines dense cosine similarity vectors with sparse BM25 term frequency using Reciprocal Rank Fusion (RRF).</p>
+          </div>
+          <span class="badge-score" id="searchLatencyBadge" style="display: none;">0ms</span>
+        </div>
+
+        <div class="search-controls">
+          <div class="search-input-wrapper">
+            <span class="search-icon-left">🔍</span>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search concept, exact phrase, code, or clause across all documents...">
+          </div>
+
+          <select id="searchMode" class="select-control" aria-label="Search Mode">
+            <option value="hybrid">Mode: Hybrid (RRF)</option>
+            <option value="dense">Mode: Dense Semantic</option>
+            <option value="sparse">Mode: Sparse BM25</option>
+          </select>
+
+          <select id="searchTopK" class="select-control" aria-label="Top Results">
+            <option value="5">Top 5 Results</option>
+            <option value="10">Top 10 Results</option>
+            <option value="20">Top 20 Results</option>
+          </select>
+
+          <select id="searchDocFilter" class="select-control" aria-label="Filter Document">
+            <option value="">All Documents</option>
+          </select>
+
+          <button type="button" class="btn-primary" id="btnExecuteSearch">Search</button>
+        </div>
+
+        <!-- Search Results Container -->
+        <div class="search-results-list" id="searchResultsList">
+          <div style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+            Type a query above and hit Search to view ranked semantic and lexical chunks.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Grounded RAG Chat Studio Pane -->
+    <section class="tab-pane" id="tab-rag">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>💬 Grounded Question-Answering & Citation Studio</h2>
+            <p class="panel-desc">Fact-tethered RAG answering questions exclusively from document evidence with verified page & snippet citations.</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <label for="ragTopK" style="font-size: 0.8rem; color: var(--text-muted);">Context Chunks:</label>
+            <select id="ragTopK" class="select-control" style="padding: 0.4rem 0.85rem; font-size: 0.82rem;">
+              <option value="3">3 Chunks</option>
+              <option value="5" selected>5 Chunks</option>
+              <option value="8">8 Chunks</option>
+            </select>
+            <button type="button" class="btn-icon" id="btnClearChat" title="Clear Conversation">🗑️</button>
+          </div>
+        </div>
+
+        <div class="chat-container">
+          <div class="chat-history" id="chatHistory">
+            <div class="chat-bubble chat-bubble-assistant">
+              👋 Welcome to the <strong>Grounded RAG Studio</strong>. Ask questions across your ingested documents.
+              Every claim is tethered to verifiable citations with page numbers, exact source snippets, and grounding confidence tags.
+            </div>
+          </div>
+
+          <div class="chat-input-bar">
+            <input type="text" id="chatInput" class="chat-input" placeholder="Ask a question about your uploaded documents..." autocomplete="off">
+            <button type="button" class="btn-primary" id="btnSendChat">Send</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Intelligent Summarization Studio Pane -->
+    <section class="tab-pane" id="tab-summary">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>📊 Multi-Tier Document Summarization Studio</h2>
+            <p class="panel-desc">Produces hierarchical summaries: Executive Overview, Key Insights, Section Breakdown, and Actionable Next Steps.</p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+          <select id="summaryDocSelect" class="select-control" style="min-width: 300px;" aria-label="Select Document to Summarize">
+            <option value="">-- Choose Document --</option>
+          </select>
+          <button type="button" class="btn-primary" id="btnGenerateSummary">Generate Multi-Tier Summary</button>
+        </div>
+
+        <div id="summaryOutput">
+          <div style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+            Select a document above and click Generate to view the executive summary, key findings, and action items.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Cross-Document Comparison Studio Pane -->
+    <section class="tab-pane" id="tab-compare">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>⚖️ Side-by-Side Document Comparison Studio</h2>
+            <p class="panel-desc">Analyzes structural textual diffs, word changes, additions/removals, and semantic variance across two documents.</p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; align-items: center; margin-bottom: 1.5rem;">
+          <div>
+            <label for="compareDocA" style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.35rem;">Base Document (Doc A):</label>
+            <select id="compareDocA" class="select-control" style="width: 100%;">
+              <option value="">-- Choose Document A --</option>
+            </select>
+          </div>
+          <div>
+            <label for="compareDocB" style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.35rem;">Target Document (Doc B):</label>
+            <select id="compareDocB" class="select-control" style="width: 100%;">
+              <option value="">-- Choose Document B --</option>
+            </select>
+          </div>
+          <div style="padding-top: 1.35rem;">
+            <button type="button" class="btn-primary" id="btnExecuteCompare">Run Comparison</button>
+          </div>
+        </div>
+
+        <div id="compareOutput">
+          <div style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+            Select two documents to compare structural changes and semantic differences.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Engine Health & Diagnostics Pane -->
+    <section class="tab-pane" id="tab-health">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>🔍 Subsystem Health & Storage Probes</h2>
+            <p class="panel-desc">Real-time status of database locks, BM25 vocabulary, NumPy vector stores, and model latency metrics.</p>
+          </div>
+        </div>
+        <div id="healthDiagnosticsContent">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Citation Provenance Side-Drawer -->
+  <aside class="citation-drawer" id="citationDrawer" aria-label="Citation Inspector">
+    <div class="drawer-header">
+      <h3 style="font-size: 1.1rem; color: #fff;">Source Provenance</h3>
+      <button class="drawer-close" id="btnCloseDrawer" aria-label="Close Citation Drawer">&times;</button>
+    </div>
+    <div id="drawerContent">
+      <!-- Injected by viewer.js -->
+    </div>
+  </aside>
+
+  <!-- Document Chunk Inspector Modal -->
+  <div id="docDetailModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); z-index: 300; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: var(--bg-secondary); border: 1px solid var(--border-glass); border-radius: var(--radius-lg); width: 100%; max-width: 800px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--shadow-lg);">
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.75rem; border-bottom: 1px solid var(--border-glass);">
+        <h3 id="docModalTitle" style="font-size: 1.15rem; color: #fff;">Document Inspector</h3>
+        <button id="btnCloseDocModal" class="btn-icon" style="border: none; font-size: 1.2rem;">&times;</button>
+      </div>
+      <div id="docModalBody" style="padding: 1.75rem; overflow-y: auto; flex: 1;">
+        <!-- Injected by viewer.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- Application Entry Script -->
+  <script type="module" src="/static/js/app.js"></script>
+</body>
+</html>
